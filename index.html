@@ -1,130 +1,41 @@
-<!DOCTYPE html>
-<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G911 Teacher365 AI</title>
-  <link rel="stylesheet" href="style.css">
+  <title>G911 리마 1:1 비서</title>
+  <style>
+    body { margin: 0; font-family: 'Pretendard', sans-serif; background: #eef2fa; display: flex; flex-direction: column; height: 100vh; }
+    header { background: #6554c0; color: #fff; text-align: center; padding: 10px; }
+    .chat-container { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .chat-box { flex: 1; padding: 15px; overflow-y: auto; }
+    .msg { margin: 8px 0; padding: 10px; border-radius: 8px; max-width: 80%; }
+    .bot { background: #fff; align-self: flex-start; border: 1px solid #ccc; }
+    .user { background: #d1e7ff; align-self: flex-end; }
+    .input-box { display: flex; padding: 10px; background: #f8f8f8; }
+    .input-box input { flex: 1; padding: 8px; }
+    .input-box button { margin-left: 5px; padding: 8px 12px; background: #6554c0; color: white; border: none; }
+  </style>
 </head>
-<body>
-  <header>
-    <h2>G911 리마 1:1 비서</h2>
-  </header>
+<script>
+  function sendMessage() {
+    const inputBox = document.getElementById("user-input");
+    const message = inputBox.value.trim();
+    if (!message) return;
 
-  <main class="chat-container">
-    <div id="chat-box" class="chat-box">
-      <div class="msg bot">리마: 어떤 명령이든 입력하세요!</div>
-    </div>
+    addMessage("user", message);
+    inputBox.value = "";
 
-    <div class="input-box">
-      <input id="user-input" type="text" placeholder="명령 입력 (예: 유튜브 업로드 따라해)" />
-      <button onclick="sendMessage()">전송</button>
-    </div>
-  </main>
+    // 리마 응답 시뮬레이션
+    setTimeout(() => {
+      addMessage("bot", `리마: '${message}' 명령을 처리 중입니다.`);
+    }, 500);
+  }
 
-  <footer>
-    <button onclick="quickCmd('유튜브 업로드 따라해')">유튜브 업로드</button>body {
-  margin: 0;
-  font-family: 'Pretendard', sans-serif;
-  background: #eef2fa;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-header {
-  background: #6554c0;
-  color: #fff;
-  text-align: center;
-  padding: 10px;
-}
-.chat-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.chat-box {
-  flex: 1;
-  padding: 15px;
-  overflow-y: auto;
-}
-.msg {
-  margin: 8px 0;
-  padding: 10px;
-  border-radius: 8px;
-  max-width: 80%;
-}
-.bot {
-  background: #fff;
-  align-self: flex-start;
-  border: 1px solid #ccc;
-}
-.user {
-  background: #d1e7ff;
-  align-self: flex-end;
-}
-.input-box {
-  display: flex;
-  padding: 10px;
-  background: #f8f8f8;
-}
-.input-box input {
-  flex: 1;
-  padding: 8px;
-}
-.input-box button {
-  margin-left: 5px;
-  padding: 8px 12px;
-  background: #6554c0;
-  color: white;
-  border: none;function sendMessage() {
-  const inputBox = document.getElementById("user-input");
-  const message = inputBox.value.trim();
-  if (!message) return;
-
-  addMessage("user", message);
-  inputBox.value = "";
-
-  // 리마 응답 (임시: AI 연결 전 기본 응답)
-  setTimeout(() => {
-    addMessage("bot", `리마: '${message}' 명령을 처리 중입니다...`);
-  }, 500);
-}
-
-function quickCmd(text) {
-  document.getElementById("user-input").value = text;
-  sendMessage();
-}
-
-function addMessage(sender, text) {
-  const chatBox = document.getElementById("chat-box");
-  const div = document.createElement("div");
-  div.className = `msg ${sender}`;
-  div.textContent = text;
-  chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-  border-radius: 5px;
-}
-footer {
-  display: flex;
-  justify-content: space-around;
-  background: #f0f0f0;
-  padding: 10px;
-}
-footer button {
-  padding: 8px 12px;
-  border: none;
-  background: #6554c0;
-  color: #fff;
-  border-radius: 5px;
-}
-
-    <button onclick="quickCmd('파일 만들기')">파일 만들기</button>
-    <button onclick="quickCmd('영상 분석')">영상 분석</button>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
-</html>
+  function addMessage(sender, text) {
+    const chatBox = document.getElementById("chat-box");
+    const div = document.createElement("div");
+    div.className = `msg ${sender}`;
+    div.textContent = text;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+</script>
