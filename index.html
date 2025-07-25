@@ -21,7 +21,17 @@
     </nav>
 
     <section id="content">
-      <p>카테고리를 선택해 세부 정보를 확인하세요.</p>body {
+      <p>카테고리를 선택해 세부 정보를 확인하세요.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 국민건설연합 | All Rights Reserved</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>body {
   margin: 0;
   font-family: 'Pretendard', sans-serif;
   background: #eef2fa;
@@ -73,18 +83,8 @@ footer {
   font-size: 0.8em;
   background: #ddd;
 }
-
-    </section>
-  </main>
-
-  <footer>
-    <p>© 2025 국민건설연합 | All Rights Reserved</p>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
-</html>
 function openPage(category) {
   const content = document.getElementById('content');
   content.innerHTML = `<h2>${category}</h2><p>${category} 관련 정보가 여기에 표시됩니다.</p>`;
 }
+
