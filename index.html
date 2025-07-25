@@ -2,116 +2,140 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>리마 AI 메인 상황판</title>
+  <title>국민건설연합 메인 상황판</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Pretendard', sans-serif; background: #eef2fa; margin:0; }
+    .wrap { max-width:420px; margin:30px auto; background:white; border-radius:20px; box-shadow:0 3px 15px #b7c3ea55; padding:28px 18px 20px; }
+    h2 { color:#5a4fcf; text-align:center; margin-bottom:18px; font-size:1.5em; letter-spacing:-1px;}
+    .menu { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:20px;}
+    .menu button {flex:1 1 45%; background:#e8e8fa; color:#5d57b3; border:none; border-radius:8px; padding:10px 0; font-weight:600; font-size:1em; cursor:pointer;}
+    .menu button.active {background:#5a4fcf; color:white;}
+    .chatbox {min-height:150px; background:#f5f7ff; border-radius:11px; margin-bottom:12px; padding:14px 11px; font-size:1.08em;}
+    .msg-bot {margin-bottom:10px;}
+    .msg-me {margin-bottom:7px; text-align:right;}
+    .msg-bot span {color:#5a4fcf; font-weight:600;}
+    .msg-me span {color:#333; font-weight:500;}
+    .inputbar {display:flex; gap:7px; margin-bottom:0;}
+    .inputbar input {flex:1; padding:11px; border-radius:9px; border:1px solid #cdd6ee; font-size:1em;}
+    .inputbar button {padding:0 23px; border-radius:9px; background:#5a4fcf; color:white; border:none; font-weight:600; font-size:1em; cursor:pointer;}
+    .menu2 {display:flex; gap:7px; margin-top:13px;}
+    .menu2 button {flex:1; background:#f5f7ff; color:#555bb7; border:none; border-radius:8px; padding:9px 0; font-weight:600; cursor:pointer;}
+    .rec {color:#37bb47; font-weight:600;}
+    @media (max-width:500px){
+      .wrap{margin:0; border-radius:0;}
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-slate-100 to-indigo-200 min-h-screen">
-  <div class="max-w-xl mx-auto p-4">
-    <h1 class="text-3xl font-bold text-indigo-700 mb-2 mt-4 text-center tracking-tight">리마 AI 메인 상황판</h1>
-    <div class="grid grid-cols-2 gap-4 mt-6">
-      <div onclick="openModal('create')" class="rounded-2xl shadow-xl bg-white p-5 flex flex-col items-center cursor-pointer hover:scale-105 transition">
-        <span class="text-2xl mb-2">🪄</span>
-        <span class="font-bold text-lg mb-1">리마 생성/관리</span>
-        <span class="text-gray-500 text-sm">무한 리마, 일괄/상세 관리</span>
-      </div>
-      <div onclick="openModal('leader')" class="rounded-2xl shadow-xl bg-white p-5 flex flex-col items-center cursor-pointer hover:scale-105 transition">
-        <span class="text-2xl mb-2">🛡️</span>
-        <span class="font-bold text-lg mb-1">리더 리마 승인</span>
-        <span class="text-gray-500 text-sm">10개 초과시 지문인증 승인</span>
-      </div>
-      <div onclick="openModal('log')" class="rounded-2xl shadow-xl bg-white p-5 flex flex-col items-center cursor-pointer hover:scale-105 transition">
-        <span class="text-2xl mb-2">📊</span>
-        <span class="font-bold text-lg mb-1">상황판/로그</span>
-        <span class="text-gray-500 text-sm">집계, 기록, 이력 실시간</span>
-      </div>
-      <div onclick="openModal('chat')" class="rounded-2xl shadow-xl bg-white p-5 flex flex-col items-center cursor-pointer hover:scale-105 transition">
-        <span class="text-2xl mb-2">💬</span>
-        <span class="font-bold text-lg mb-1">채팅/알림/보고</span>
-        <span class="text-gray-500 text-sm">명령, 승인, 실시간 대화</span>
-      </div>
+<body>
+  <div class="wrap">
+    <h2>국민건설연합 메인 상황판</h2>
+    <div class="menu">
+      <button id="btnLabor" class="active">인력시장</button>
+      <button id="btnSubcon">단종업체</button>
+      <button id="btnEquip">장비대여</button>
+      <button id="btnMaterial">자재구매</button>
+      <button id="btnNetwork">네트워크</button>
     </div>
-    <div class="mt-8 mb-2 px-4 py-2 bg-white rounded-xl shadow text-center text-indigo-700 font-semibold">
-      <span id="mainStatus">현재 리더 리마: 10개 | 승인대기: 1건</span>
+    <div class="chatbox" id="chatbox">
+      <div class="msg-bot"><span>시스템:</span> 건설 상황판에 오신 것을 환영합니다! 카테고리를 선택하세요.</div>
     </div>
-    <div id="modalBG" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-40 hidden">
-      <div id="modal" class="bg-white rounded-2xl shadow-2xl p-6 w-[94vw] max-w-md relative animate-fadeIn">
-        <button onclick="closeModal()" class="absolute top-3 right-4 text-2xl text-gray-400 hover:text-indigo-500">&times;</button>
-        <div id="modalContent"></div>
-      </div>
+    <form class="inputbar" onsubmit="sendMsg();return false;">
+      <input id="userInput" autocomplete="off" placeholder="명령 입력 (예: 인력 등록, 장비 요청 등)"/>
+      <button type="submit">전송</button>
+    </form>
+    <div class="menu2">
+      <button onclick="downloadLog()">대화 기록 다운로드</button>
+      <button onclick="alert('건설 네트워크 맵은 준비 중입니다')">네트워크 맵</button>
     </div>
   </div>
   <script>
-    let leaderCount = 10;
-    let approveWaiting = 1;
-    let logs = [
-      "리더 리마 10개 자동 생성 완료",
-      "11번째 리더 리마 승인 요청(지문 인증)",
-      "승인 대기중..."
-    ];
+    let mode = "labor";  // 기본 인력시장
+    let step = 0;
     let chatlog = [
-      "[알림] 리더 리마 10개 초과 승인 필요",
-      "[상황] 관리자 승인/거부 모두 기록됨"
+      {from:'bot', msg:'건설 상황판에 오신 것을 환영합니다! 카테고리를 선택하세요.'}
     ];
-    function openModal(type) {
-      let html = "";
-      if(type==="create") {
-        html = `
-        <h2 class="text-xl font-bold mb-2 text-indigo-700">🪄 리마 생성/관리</h2>
-        <p class="mb-4 text-gray-700">여기서 리마를 무한 생성/삭제/상태 관리 가능합니다.</p>
-        <button class="w-full py-2 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 mb-2" onclick="alert('새 리마 생성!')">새 리마 생성</button>
-        <button class="w-full py-2 bg-indigo-50 text-indigo-600 font-semibold rounded-xl border border-indigo-200 hover:bg-indigo-100" onclick="alert('리마 상태 보기')">상세 보기</button>
-        `;
-      }
-      if(type==="leader") {
-        html = `
-        <h2 class="text-xl font-bold mb-2 text-indigo-700">🛡️ 리더 리마 승인</h2>
-        <p class="mb-3 text-gray-700">10개 초과시 지문인증 승인만 가능합니다.</p>
-        <div class="mb-4">
-          <span class="font-semibold text-gray-700">현재 리더 리마:</span> ${leaderCount}개 <br>
-          <span class="font-semibold text-gray-700">승인 대기:</span> ${approveWaiting}건
-        </div>
-        <button class="w-full py-2 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 mb-3" onclick="fingerApprove()">지문인증 승인하기</button>
-        `;
-      }
-      if(type==="log") {
-        html = `
-        <h2 class="text-xl font-bold mb-2 text-indigo-700">📊 상황판/로그</h2>
-        <ul class="list-disc ml-4 mb-2">
-          ${logs.map(l=>`<li class="text-gray-700 mb-1">${l}</li>`).join("")}
-        </ul>
-        <button class="w-full py-2 bg-indigo-50 text-indigo-600 font-semibold rounded-xl border border-indigo-200 hover:bg-indigo-100" onclick="alert('로그 다운로드')">전체 로그 다운로드</button>
-        `;
-      }
-      if(type==="chat") {
-        html = `
-        <h2 class="text-xl font-bold mb-2 text-indigo-700">💬 채팅/알림/보고</h2>
-        <div class="mb-2 text-gray-700">명령, 승인, 시스템 상태, 알림 등 실시간 대화 지원</div>
-        <div class="bg-slate-100 rounded p-3 mb-3 h-28 overflow-y-auto">
-          ${chatlog.map(m=>`<div>${m}</div>`).join("")}
-        </div>
-        <textarea class="w-full rounded p-2 border mb-2" placeholder="GPT+리마에게 명령 입력"></textarea>
-        <button class="w-full py-2 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700">명령 전송</button>
-        `;
-      }
-      document.getElementById('modalContent').innerHTML = html;
-      document.getElementById('modalBG').classList.remove('hidden');
+
+    // 카테고리 버튼 연결
+    document.getElementById('btnLabor').onclick = function(){
+      mode = "labor"; setActive(this); introChat();
     }
-    function closeModal() { document.getElementById('modalBG').classList.add('hidden'); }
-    function fingerApprove() {
-      let ok = confirm("지문 인증 성공 처리 (실제 WebAuthn 연동)");
-      if(ok) {
-        leaderCount++;
-        approveWaiting = Math.max(0, approveWaiting-1);
-        logs.unshift(`지문 인증 승인, 리더 리마 ${leaderCount}개`);
-        chatlog.unshift(`[알림] ${leaderCount}번째 리더 리마 승인!`);
-        document.getElementById('mainStatus').innerText = `현재 리더 리마: ${leaderCount}개 | 승인대기: ${approveWaiting}건`;
-        closeModal();
-        alert('승인 완료! 상황판에 반영됩니다.');
-      } else {
-        logs.unshift('지문 인증 거부됨!');
-        closeModal();
+    document.getElementById('btnSubcon').onclick = function(){
+      mode = "subcon"; setActive(this); introChat();
+    }
+    document.getElementById('btnEquip').onclick = function(){
+      mode = "equip"; setActive(this); introChat();
+    }
+    document.getElementById('btnMaterial').onclick = function(){
+      mode = "material"; setActive(this); introChat();
+    }
+    document.getElementById('btnNetwork').onclick = function(){
+      mode = "network"; setActive(this); introChat();
+    }
+
+    function setActive(btn){
+      document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function introChat(){
+      chatlog = [];
+      if(mode=="labor") chatlog.push({from:'bot', msg:'인력시장: 인력 등록, 매칭, 출근 현황 확인 가능.'});
+      if(mode=="subcon") chatlog.push({from:'bot', msg:'단종업체: 업체 등록 및 공사별 협력 구조 확인.'});
+      if(mode=="equip") chatlog.push({from:'bot', msg:'장비대여: 장비 요청/예약 및 가용 현황 확인.'});
+      if(mode=="material") chatlog.push({from:'bot', msg:'자재구매: 공동구매 및 단가 비교 확인.'});
+      if(mode=="network") chatlog.push({from:'bot', msg:'네트워크: 인근 현장·업체 네트워크 맵 확인.'});
+      updateChatbox();
+    }
+
+    function sendMsg(){
+      let v = document.getElementById('userInput').value.trim();
+      if(!v) return;
+      chatlog.push({from:'me', msg:v});
+      document.getElementById('userInput').value = "";
+      updateChatbox();
+      setTimeout(()=>handleCommand(v), 600);
+    }
+
+    function handleCommand(v){
+      if(mode==="labor"){
+        if(/등록|추가/.test(v)){
+          chatlog.push({from:'bot', msg:`"${v}" 인력을 등록했습니다.`});
+        } else {
+          chatlog.push({from:'bot', msg:`인력시장 명령 처리: "${v}" (예시 응답)`});
+        }
       }
+      else if(mode==="subcon"){
+        chatlog.push({from:'bot', msg:`단종업체 관련 명령: "${v}" 처리 완료.`});
+      }
+      else if(mode==="equip"){
+        chatlog.push({from:'bot', msg:`장비대여 요청: "${v}" 예약 처리.`});
+      }
+      else if(mode==="material"){
+        chatlog.push({from:'bot', msg:`자재구매 요청: "${v}" 견적 진행.`});
+      }
+      else if(mode==="network"){
+        chatlog.push({from:'bot', msg:`네트워크 요청: "${v}" 위치/연결 확인.`});
+      }
+      updateChatbox();
+    }
+
+    function updateChatbox(){
+      let html = '';
+      chatlog.forEach(row=>{
+        if(row.from==='bot') html += `<div class="msg-bot"><span>시스템:</span> ${row.msg}</div>`;
+        else html += `<div class="msg-me"><span>나:</span> ${row.msg}</div>`;
+      });
+      document.getElementById('chatbox').innerHTML = html;
+    }
+
+    function downloadLog(){
+      let txt = chatlog.map(r=>(r.from==='bot'?'시스템: ':'나: ')+r.msg.replace(/<[^>]+>/g,'')).join('\n');
+      let blob = new Blob([txt],{type:'text/plain'});
+      let url = URL.createObjectURL(blob);
+      let a = document.createElement('a');
+      a.href=url; a.download='건설_상황판_대화기록.txt'; a.click();
+      setTimeout(()=>URL.revokeObjectURL(url), 1000);
     }
   </script>
 </body>
