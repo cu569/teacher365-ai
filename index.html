@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>국민건설연합 플랫폼</title>
+  <title>국민건설연합</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -21,9 +21,7 @@
     </nav>
 
     <section id="content">
-      <p>카테고리를 선택해 세부 정보를 확인하세요.</p>
-    </section>
-  </main>body {
+      <p>카테고리를 선택해 세부 정보를 확인하세요.</p>body {
   margin: 0;
   font-family: 'Pretendard', sans-serif;
   background: #eef2fa;
@@ -63,11 +61,7 @@ header {
 
 #content {
   padding: 20px;
-  text-align: center;function openPage(category) {
-  const content = document.getElementById('content');
-  content.innerHTML = `<h2>${category}</h2><p>${category} 관련 정보가 여기에 표시됩니다.</p>`;
-}
-
+  text-align: center;
   background: #fff;
   margin: 10px;
   border-radius: 8px;
@@ -80,6 +74,8 @@ footer {
   background: #ddd;
 }
 
+    </section>
+  </main>
 
   <footer>
     <p>© 2025 국민건설연합 | All Rights Reserved</p>
@@ -88,3 +84,7 @@ footer {
   <script src="script.js"></script>
 </body>
 </html>
+function openPage(category) {
+  const content = document.getElementById('content');
+  content.innerHTML = `<h2>${category}</h2><p>${category} 관련 정보가 여기에 표시됩니다.</p>`;
+}
