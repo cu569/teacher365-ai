@@ -1,107 +1,33 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G911 리마 1:1 비서</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Pretendard', sans-serif;
-      background: #eef2fa;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-    header {
-      background: #6554c0;
-      color: #fff;
-      text-align: center;
-      padding: 10px;
-      font-size: 1.2em;
-    }
-    .chat-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .chat-box {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-    }
-    .msg {
-      margin: 8px 0;
-      padding: 10px;
-      border-radius: 8px;
-      max-width: 80%;
-    }
-    .bot {
-      background: #fff;
-      align-self: flex-start;
-      border: 1px solid #ccc;
-    }
-    .user {
-      background: #d1e7ff;
-      align-self: flex-end;
-    }
-    .input-box {
-      display: flex;
-      padding: 10px;
-      background: #f8f8f8;
-    }
-    .input-box input {
-      flex: 1;
-      padding: 8px;
-    }
-    .input-box button {
-      margin-left: 5px;
-      padding: 8px 12px;
-      background: #6554c0;
-      color: white;
-      border: none;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    G911 리마 1:1 비서
-  </header>
+<script>
+  function sendMessage() {
+    const inputBox = document.getElementById("user-input");
+    const message = inputBox.value.trim();
+    if (!message) return;
 
-  <div class="chat-container">
-    <div class="chat-box" id="chat-box">
-      <div class="msg bot">리마: 어떤 명령이든 입력하세요!</div>
-    </div>
-    <div class="input-box">
-      <input type="text" id="user-input" placeholder="명령 입력 (예: 유튜브 업로드 따라해)">
-      <button onclick="sendMessage()">전송</button>
-    </div>
-  </div>
+    addMessage("user", message);
+    inputBox.value = "";
 
-  <script>
-    function sendMessage() {
-      const inputBox = document.getElementById("user-input");
-      const message = inputBox.value.trim();
-      if (!message) return;
+    // AI 응답 시뮬레이션 (나중에 GPT API로 교체 가능)
+    setTimeout(() => {
+      addMessage("bot", `리마: '${message}' 명령을 처리 중입니다.`);
+    }, 500);
+  }
 
-      addMessage("user", message);
-      inputBox.value = "";
+  function addMessage(sender, text) {
+    const chatBox = document.getElementById("chat-box");
+    const div = document.createElement("div");header {
+  position: sticky;
+  top: 0;
+}
 
-      // 리마 응답 시뮬레이션
-      setTimeout(() => {
-        addMessage("bot", `리마: '${message}' 명령을 처리 중입니다.`);
-      }, 500);
-    }
+.input-box {
+  position: sticky;
+  bottom: 0;
+}
 
-    function addMessage(sender, text) {
-      const chatBox = document.getElementById("chat-box");
-      const div = document.createElement("div");
-      div.className = `msg ${sender}`;
-      div.textContent = text;
-      chatBox.appendChild(div);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-  </script>
-</body>
-</html>
+    div.className = `msg ${sender}`;
+    div.textContent = text;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+</script>
