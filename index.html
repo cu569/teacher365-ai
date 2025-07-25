@@ -1,124 +1,133 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
   <title>국민건설연합 메인 상황판</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body { font-family: 'Pretendard', sans-serif; background:#eef2fa; margin:0; }
-    header { background:#6554c0; color:white; padding:14px; font-size:1.4em; text-align:center; font-weight:700;}
-    .container { max-width:450px; margin:0 auto; padding:15px;}
-    select { width:100%; padding:8px; margin:10px 0; border-radius:8px; border:1px solid #ccc; font-size:1em;}
-    .menu, .submenu { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:10px;}
-    .menu button, .submenu button { flex:1 1 45%; padding:12px; border:none; border-radius:10px; font-size:1em; cursor:pointer; font-weight:600;}
-    .menu button { background:#ddd; color:#333;}
-    .menu button.active { background:#6554c0; color:white;}
-    .submenu button { background:#f1f1f9; color:#6554c0; border:1px solid #ccc;}
-    .chatbox { background:white; border-radius:10px; padding:10px; min-height:160px; font-size:0.95em; margin-bottom:10px; overflow-y:auto;}
-    .log-system { color:#6b5fcf; font-weight:600;}
-    .log-user { text-align:right; color:#333;}
-    .log-lima { color:#4a4a4a;}
-    .inputbar { display:flex; gap:7px;}
-    .inputbar input { flex:1; padding:10px; border-radius:8px; border:1px solid #ccc;}
-    .inputbar button { padding:10px 20px; border-radius:8px; border:none; background:#6554c0; color:white; font-weight:600;}
-    .bottom-btn { display:flex; gap:10px; margin-top:10px;}
-    .bottom-btn button { flex:1; padding:10px; border:none; border-radius:8px; background:#ddd; font-weight:600;}
+    body { margin:0; font-family:'Pretendard',sans-serif; background:#eef2fa; }
+    header { background:#5a4fcf; color:white; padding:15px; text-align:center; font-size:1.5em; font-weight:bold; }
+    .container { max-width:600px; margin:20px auto; padding:10px; }
+    select { width:100%; padding:10px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc; font-size:1em; }
+
+    /* 메인 카테고리 버튼 */
+    .categories { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:15px; }
+    .categories button { flex:1 1 45%; background:#d8d4f7; border:none; border-radius:10px; padding:15px; font-size:1em; font-weight:600; cursor:pointer; }
+    .categories button.active { background:#5a4fcf; color:#fff; }
+
+    /* 세부 메뉴 */
+    .submenu { display:none; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:15px; }
+    .submenu button { flex:1 1 45%; background:#f4f4fc; border:none; border-radius:10px; padding:12px; font-size:0.95em; cursor:pointer; }
+
+    /* 로그 영역 */
+    .log-box { background:white; border-radius:10px; padding:10px; font-size:0.9em; height:180px; overflow-y:auto; margin-bottom:10px; border:1px solid #ccc; }
+    .system { color:#5a4fcf; font-weight:600; }
+    .user { color:#222; }
+    .lima { color:#37bb47; }
+
+    /* 입력 영역 */
+    .input-area { display:flex; gap:5px; }
+    .input-area input { flex:1; padding:10px; border-radius:8px; border:1px solid #ccc; }
+    .input-area button { padding:0 20px; background:#5a4fcf; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600; }
+
+    /* 하단 메뉴 */
+    .bottom-menu { display:flex; gap:10px; margin-top:10px; }
+    .bottom-menu button { flex:1; background:#e8e8fa; border:none; border-radius:8px; padding:10px; font-size:0.9em; cursor:pointer; }
   </style>
 </head>
 <body>
-<header>국민건설연합 메인 상황판</header>
-<div class="container">
-  <!-- 지점 선택 -->
-  <select id="branch">
-    <option>서울본사</option>
-    <option>부산지사</option>
-    <option>대구지사</option>
-    <option>광주지사</option>
-  </select>
+  <header>국민건설연합 메인 상황판</header>
+  <div class="container">
+    <select id="branch">
+      <option>서울본사</option>
+      <option>부산지사</option>
+      <option>대구지사</option>
+      <option>광주지사</option>
+    </select>
 
-  <!-- 메인 카테고리 -->
-  <div class="menu">
-    <button onclick="openCategory('인력시장')" id="btnWork">인력시장</button>
-    <button onclick="openCategory('단종업체')">단종업체</button>
-    <button onclick="openCategory('장비대여')">장비대여</button>
-    <button onclick="openCategory('자재구매')">자재구매</button>
-    <button onclick="openCategory('네트워크')">네트워크 맵</button>
+    <!-- 메인 카테고리 -->
+    <div class="categories">
+      <button onclick="openCategory('인력시장')">인력시장</button>
+      <button onclick="openCategory('단종업체')">단종업체</button>
+      <button onclick="openCategory('장비대여')">장비대여</button>
+      <button onclick="openCategory('자재구매')">자재구매</button>
+      <button onclick="openCategory('네트워크')">네트워크 맵</button>
+    </div>
+
+    <!-- 세부 메뉴 -->
+    <div id="submenu" class="submenu"></div>
+
+    <!-- 로그 출력 -->
+    <div class="log-box" id="logBox">
+      <div class="system">시스템: 상황판 초기화 완료.</div>
+    </div>
+
+    <!-- 입력 -->
+    <div class="input-area">
+      <input id="commandInput" placeholder="명령 입력 (예: 인력 등록, 장비 요청 등)" />
+      <button onclick="sendCommand()">전송</button>
+    </div>
+
+    <!-- 하단 버튼 -->
+    <div class="bottom-menu">
+      <button onclick="downloadLog()">대화 기록 다운로드</button>
+      <button onclick="alert('전국 네트워크 맵 준비중')">네트워크 맵</button>
+    </div>
   </div>
 
-  <!-- 세부 메뉴 -->
-  <div class="submenu" id="submenu"></div>
+  <script>
+    const submenuData = {
+      "인력시장": ["인력 등록", "인력 요청", "출근 확인", "계약 현황"],
+      "단종업체": ["업체 등록", "견적 요청", "계약 현황", "평점 보기"],
+      "장비대여": ["장비 요청", "예약 현황", "가용 현황", "반납 확인"],
+      "자재구매": ["재고 확인", "자재 요청", "구매 내역", "납품 일정"],
+      "네트워크": ["지점 현황", "지도 보기", "연결 상태", "보고서 다운로드"]
+    };
 
-  <!-- 대화창 -->
-  <div class="chatbox" id="chatbox">
-    <div class="log-system">시스템: 상황판 초기화 완료.</div>
-  </div>
+    function openCategory(category) {
+      const submenu = document.getElementById("submenu");
+      submenu.innerHTML = "";
+      submenu.style.display = "flex";
 
-  <!-- 명령 입력 -->
-  <form class="inputbar" onsubmit="sendCommand();return false;">
-    <input id="userInput" placeholder="명령 입력 (예: 인력 등록, 장비 요청 등)"/>
-    <button type="submit">전송</button>
-  </form>
+      submenuData[category].forEach(item => {
+        const btn = document.createElement("button");
+        btn.textContent = item;
+        btn.onclick = () => logMessage("user", `나: ${category} - ${item} 선택`);
+        submenu.appendChild(btn);
+      });
 
-  <!-- 하단 버튼 -->
-  <div class="bottom-btn">
-    <button onclick="downloadLog()">대화 기록 다운로드</button>
-    <button onclick="alert('네트워크 맵 준비중')">네트워크 맵</button>
-  </div>
-</div>
-
-<script>
-  const chatbox = document.getElementById('chatbox');
-  const submenu = document.getElementById('submenu');
-  let currentCategory = null;
-
-  // 카테고리 열기
-  function openCategory(cat){
-    currentCategory = cat;
-    document.querySelectorAll('.menu button').forEach(btn=>btn.classList.remove('active'));
-    event.target.classList.add('active');
-
-    addLog('system', `${cat} 카테고리 열렸습니다.`);
-
-    if(cat === '인력시장'){
-      submenu.innerHTML = `
-        <button onclick="addLog('system','인력 등록 메뉴 선택됨')">인력 등록</button>
-        <button onclick="addLog('system','인력 요청 메뉴 선택됨')">인력 요청</button>
-        <button onclick="addLog('system','출근 확인 메뉴 선택됨')">출근 확인</button>
-        <button onclick="addLog('system','계약 현황 메뉴 선택됨')">계약 현황</button>
-      `;
-    } else {
-      submenu.innerHTML = `<button style="flex:1;background:#eee;">${cat} 메뉴 준비중</button>`;
+      logMessage("system", `시스템: "${category}" 카테고리가 열렸습니다.`);
     }
-  }
 
-  // 로그 출력
-  function addLog(type, msg){
-    const div = document.createElement('div');
-    div.className = type === 'system' ? 'log-system' : (type==='user'?'log-user':'log-lima');
-    div.textContent = `${type==='system'?'시스템':type==='user'?'나':'리마'}: ${msg}`;
-    chatbox.appendChild(div);
-    chatbox.scrollTop = chatbox.scrollHeight;
-  }
+    function logMessage(type, text) {
+      const logBox = document.getElementById("logBox");
+      const div = document.createElement("div");
+      div.className = type;
+      div.textContent = text;
+      logBox.appendChild(div);
+      logBox.scrollTop = logBox.scrollHeight;
+    }
 
-  // 명령 전송
-  function sendCommand(){
-    const v = document.getElementById('userInput').value.trim();
-    if(!v) return;
-    addLog('user', v);
-    document.getElementById('userInput').value = '';
-    setTimeout(()=>addLog('lima', `"${v}" 요청 접수됨. 처리중입니다...`), 600);
-  }
+    function sendCommand() {
+      const input = document.getElementById("commandInput");
+      if (!input.value.trim()) return;
+      logMessage("user", `나: ${input.value}`);
+      setTimeout(() => logMessage("lima", `리마: "${input.value}" 요청 접수됨. 처리중입니다...`), 500);
+      input.value = "";
+    }
 
-  // 대화 기록 다운로드
-  function downloadLog(){
-    const logs = Array.from(chatbox.children).map(div=>div.textContent).join('\n');
-    const blob = new Blob([logs], {type:'text/plain'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = '상황판_대화기록.txt';
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-</script>
+    function downloadLog() {
+      const logs = Array.from(document.querySelectorAll("#logBox div"))
+        .map(div => div.textContent)
+        .join("\n");
+      const blob = new Blob([logs], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "log.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
 </body>
 </html>
