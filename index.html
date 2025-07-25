@@ -1,43 +1,29 @@
-import os
-import base64
-import requests
-
-# ==== 설정 ====
-GITHUB_TOKEN = "여기에_토큰_입력"  # Personal Access Token
-REPO_OWNER = "cu569"
-REPO_NAME = "teacher365-ai"
-BRANCH = "main"
-LOCAL_DIR = r"C:\Users\Park\OneDrive\바탕 화면\webapp"  # 업로드할 로컬 폴더 경로
-COMMIT_MESSAGE = "국민건설연합 자동 업로드"
-
-# ==== GitHub API ====
-def upload_folder_to_github():
-    api_url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/"
-    
-    for root, dirs, files in os.walk(LOCAL_DIR):
-        for file_name in files:
-            file_path = os.path.join(root, file_name)
-            rel_path = os.path.relpath(file_path, LOCAL_DIR).replace("\\", "/")
-
-            with open(file_path, "rb") as f:
-                content = base64.b64encode(f.read()).decode()
-
-            url = api_url + "webapp/" + rel_path
-            data = {
-                "message": COMMIT_MESSAGE,
-                "content": content,
-                "branch": BRANCH
-            }
-
-            response = requests.put(url, headers={
-                "Authorization": f"token {GITHUB_TOKEN}",
-                "Accept": "application/vnd.github.v3+json"
-            }, json=data)
-
-            if response.status_code in [200, 201]:
-                print(f"✅ 업로드 성공: {rel_path}")
-            else:
-                print(f"❌ 업로드 실패: {rel_path}, {response.text}")
-
-if __name__ == "__main__":
-    upload_folder_to_github()
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher365 AI</title>
+  <style>
+    body { font-family:sans-serif; background:#f2f2f2; text-align:center; padding:20px;}
+    .chat-box { background:#fff; padding:15px; border-radius:10px; width:90%; max-width:500px; margin:auto;}
+    input { width:80%; padding:8px; }
+    button { padding:8px 12px; margin-left:5px;}
+  </style>
+</head>
+<body>
+  <h2>G911 Teacher365 AI</h2>
+  <div class="chat-box" id="chat-box">
+    <p><b>리마:</b> 어떤 명령이든 입력하세요!</p>
+  </div>
+  <input id="user-input" placeholder="명령 입력"/>
+  <button onclick="sendMessage()">전송</button>
+  <script>
+    function sendMessage(){
+      const input = document.getElementById('user-input').value;
+      document.getElementById('chat-box').innerHTML += `<p><b>나:</b> ${input}</p>`;
+      document.getElementById('user-input').value = '';
+    }
+  </script>
+</body>
+</html>
